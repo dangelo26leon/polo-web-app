@@ -1,0 +1,1 @@
+Test para la fusión (merge) de la rama versión-2.0 con la rama master
