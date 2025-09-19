@@ -8,3 +8,5 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>
 );
+
+//Este es un ejemplo de otro commit cuando trabajamos de manera independiente
