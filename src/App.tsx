@@ -7,6 +7,7 @@ import CheckoutPage from './components/CheckoutPage';
 import AuthPage from './components/AuthPage';
 import UserProfile from './components/UserProfile';
 import SearchFilter from './components/SearchFilter';
+import FavoritesPage from './components/FavoritePage';
 import { Package, Phone, MapPin, Mail, Star, Heart } from 'lucide-react';
 import logoPolo from '/images/logo_polo.png';
 
@@ -37,7 +38,7 @@ interface UserData {
 }
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'checkout' | 'auth' | 'profile'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'checkout' | 'auth' | 'profile' | 'favorites'>('home');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -466,6 +467,41 @@ function App() {
             onBack={() => setCurrentPage('home')}
           />
         )}
+      </div>
+    );
+  }
+
+  // If we're on the favorites page, render the FavoritesPage component
+  if (currentPage === 'favorites') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header 
+          cartItems={getTotalCartItems()} 
+          onCartClick={() => setIsCartOpen(true)} 
+          currentPage={currentPage}
+          onNavigate={setCurrentPage}
+          user={user}
+          onProfileClick={() => setCurrentPage('profile')}
+        />
+
+        <Cart
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          items={cartItems}
+          onUpdateQuantity={updateCartQuantity}
+          onRemoveItem={removeFromCart}
+          onClearCart={clearCart}
+          onProceedToCheckout={handleProceedToCheckout}
+          user={user}
+        />
+
+        <FavoritesPage
+          allProducts={allProducts}
+          favorites={favorites}
+          onAddToCart={addToCart}
+          onToggleFavorite={toggleFavorite}
+          onBack={() => setCurrentPage('home')}
+        />
       </div>
     );
   }

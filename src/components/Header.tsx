@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, ShoppingCart, Phone, MapPin, Mail, Home, Package, Search, User, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingCart, Phone, MapPin, Mail, Home, Package, Search, User, LogOut, Heart } from 'lucide-react';
 import logoPolo from '/images/logo_polo.png';
 
 interface UserData {
@@ -17,8 +17,8 @@ interface UserData {
 interface HeaderProps {
   cartItems: number;
   onCartClick: () => void;
-  currentPage?: 'home' | 'products' | 'checkout' | 'auth' | 'profile';
-  onNavigate?: (page: 'home' | 'products' | 'checkout' | 'auth' | 'profile') => void;
+  currentPage?: 'home' | 'products' | 'checkout' | 'auth' | 'profile' | 'favorites';
+  onNavigate?: (page: 'home' | 'products' | 'checkout' | 'auth' | 'profile' | 'favorites') => void;
   user?: UserData | null;
   onProfileClick?: () => void;
 }
@@ -161,6 +161,18 @@ const Header: React.FC<HeaderProps> = ({
                       </button>
                       <button
                         onClick={() => {
+                          onNavigate?.('favorites');
+                          setIsUserMenuOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm ${
+                          currentPage === 'favorites' ? 'bg-gray-100 text-green-700' : 'text-gray-700'
+                        } hover:bg-gray-100 flex items-center`}
+                      >
+                        <Heart className="w-4 h-4 mr-2" />
+                        Mis Favoritos
+                      </button>
+                      <button
+                        onClick={() => {
                           // Handle logout
                           localStorage.removeItem('inversionesPoloCurrentUser');
                           window.location.reload();
@@ -260,6 +272,18 @@ const Header: React.FC<HeaderProps> = ({
                   >
                     <User className="w-4 h-4 mr-2" />
                     Mi Perfil ({user.firstName})
+                  </button>
+                  <button
+                    onClick={() => {
+                      onNavigate?.('favorites');
+                      setIsMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center px-4 py-2 ${
+                      currentPage === 'favorites' ? 'text-green-700' : 'text-gray-700'
+                    } hover:text-green-700 transition-colors`}
+                  >
+                    <Heart className="w-4 h-4 mr-2" />
+                    Mis Favoritos
                   </button>
                   <button
                     onClick={() => {
