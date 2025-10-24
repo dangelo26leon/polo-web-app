@@ -274,6 +274,51 @@ function App() {
       category: 'Tecnología',
       description: 'Compatible para PC, PSII, PSIII, PC360(XBOX), ANDROID, SMART TV BOX. La transmisión inalámbrica se puede utilizar en 8 metros. '
     },
+    {
+      id: 26,
+      name: "Microondas Digital 30L",
+      price: "S/ 429.00",
+      image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQPf3yRcQRUAJLrDXaDe9DEAAZEVjgNye786DMmDW0MHxgQH60sK-V4E0DQCO3x5HrrAAzXixTEMZTt_Hs99eSyd-6RaAIk0Jj1hlnMnJ__5Zkele0ITvKbtl81HEVpSXORHsWgtancpg&usqp=CAc",
+      rating: 4.6,
+      category: "Electrodomésticos",
+      description: "Microondas digital de 30 litros con función grill, pantalla LED y 10 niveles de potencia."
+    },
+    {
+      id: 27,
+      name: "Refrigeradora No Frost 250L",
+      price: "S/ 1,299.00",
+      image: "https://production-tailoy-repo-magento-statics.s3.amazonaws.com/imagenes/872x872/productos/i/r/e/refrigeradora-no-frost-250l-grafito-58301-default-2.jpg",
+      rating: 4.8,
+      category: "Electrodomésticos",
+      description: "Refrigeradora de bajo consumo con sistema No Frost, diseño elegante y compartimiento de congelación rápida."
+    },
+    {
+      id: 28,
+      name: "Aspiradora Ciclónica 1800W",
+      price: "S/ 329.00",
+      image: "https://http2.mlstatic.com/D_NQ_NP_957520-MLU73783519838_012024-O.webp",
+      rating: 4.7,
+      category: "Electrodomésticos",
+      description: "Aspiradora sin bolsa con tecnología ciclónica, filtro HEPA lavable y cable retráctil automático."
+    },
+    {
+      id: 29,
+      name: "Ventilador de Torre 45W",
+      price: "S/ 139.00",
+      image: "https://oechsle.vteximg.com.br/arquivos/ids/21824695/imageUrl_1.jpg?v=638903180244770000",
+      rating: 4.3,
+      category: "Electrodomésticos",
+      description: "Ventilador de torre oscilante de 45W con control de velocidad y temporizador de apagado automático."
+    },
+    {
+      id: 30,
+      name: "Horno Eléctrico 25L",
+      price: "S/ 289.00",
+      image: "https://imaco.pe/cdn/shop/files/HEB25R-producc_730975a7-1c93-4e57-a2f4-5e16c69f528c.jpg?v=1726256618&width=1946",
+      rating: 4.5,
+      category: "Electrodomésticos",
+      description: "Horno eléctrico de 25 litros con función de asado, parrilla removible y control de temperatura ajustable."
+    }
     
   ];
 
