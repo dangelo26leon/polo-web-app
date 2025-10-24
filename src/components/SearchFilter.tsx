@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, FilterX  } from 'lucide-react';
 
 interface SearchFilterProps {
   searchTerm: string;
@@ -16,6 +16,13 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   onCategoryChange,
   categories
 }) => {
+
+  const isFilterActive = searchTerm !== '' || selectedCategory !== '';
+
+  const handleClearFilters = () => {
+    onSearchChange('');
+    onCategoryChange('');
+  };
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-8">
       <div className="flex flex-col md:flex-row gap-4">
@@ -47,6 +54,18 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
             ))}
           </select>
         </div>
+        {isFilterActive && (
+          <div className="relative">
+            <div className="hidden md:block text-sm font-medium text-gray-700 mb-2">&nbsp;</div>
+            <button
+              onClick={handleClearFilters}
+              className="flex items-center justify-center w-full md:w-auto px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <FilterX className="w-4 h-4 md:mr-2" />
+              <span className="hidden md:inline">Limpiar</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
