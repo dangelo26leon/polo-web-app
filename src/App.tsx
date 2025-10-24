@@ -8,6 +8,7 @@ import AuthPage from './components/AuthPage';
 import UserProfile from './components/UserProfile';
 import SearchFilter from './components/SearchFilter';
 import FavoritesPage from './components/FavoritePage';
+import Toast from './components/Toast';
 import { Package, Phone, MapPin, Mail, Star, Heart } from 'lucide-react';
 import logoPolo from '/images/logo_polo.png';
 
@@ -45,6 +46,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [user, setUser] = useState<UserData | null>(null);
+  const [toastMessage, setToastMessage] = useState('');
 
   const allProducts: Product[] = [
     { 
@@ -327,6 +329,7 @@ function App() {
         return [...prevItems, { ...product, quantity }];
       }
     });
+    setToastMessage(`${product.name} agregado al carrito.`);
   };
 
   const updateCartQuantity = (id: number, quantity: number) => {
@@ -378,11 +381,15 @@ function App() {
   };
 
   const toggleFavorite = (productId: number) => {
-    setFavorites(prevFavorites =>
-      prevFavorites.includes(productId)
-        ? prevFavorites.filter(id => id !== productId)
-        : [...prevFavorites, productId]
-    );
+    setFavorites(prevFavorites => { 
+      if (prevFavorites.includes(productId)) {
+        setToastMessage('Producto eliminado de favoritos.');
+        return prevFavorites.filter(id => id !== productId);
+      } else {
+        setToastMessage('Producto agregado a favoritos.');
+        return [...prevFavorites, productId];
+      }
+    });
   };
 
   const getTotalCartItems = () => {
@@ -427,6 +434,8 @@ function App() {
           user={user}
         />
 
+        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />} 
+
         <AuthPage
           onBack={() => setCurrentPage('home')}
           onLogin={handleLogin}
@@ -458,6 +467,8 @@ function App() {
           onProceedToCheckout={handleProceedToCheckout}
           user={user}
         />
+
+        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
 
         {user && (
           <UserProfile
@@ -495,6 +506,8 @@ function App() {
           user={user}
         />
 
+        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+
         <FavoritesPage
           allProducts={allProducts}
           favorites={favorites}
@@ -530,6 +543,8 @@ function App() {
           user={user}
         />
 
+        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+
         <CheckoutPage
           cartItems={cartItems}
           onBack={() => setCurrentPage('home')}
@@ -564,6 +579,8 @@ function App() {
           user={user}
         />
 
+        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+
         <ProductsPage
           products={allProducts}
           onAddToCart={addToCart}
@@ -597,6 +614,8 @@ function App() {
         onProceedToCheckout={handleProceedToCheckout}
         user={user}
       />
+
+      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
 
       {/* Hero Section */}
       <section id="inicio" className="bg-gradient-to-r from-green-800 to-green-600 text-white">
