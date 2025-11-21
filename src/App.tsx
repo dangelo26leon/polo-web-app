@@ -53,8 +53,31 @@ function App() {
   const [toastMessage, setToastMessage] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
 
-  const allProducts: Product[] = [...allProductsData];
+  // Inicializar productos desde JSON y localStorage
+  useEffect(() => {
+    const savedProducts = localStorage.getItem('inversionesPoloProducts');
+    if (savedProducts) {
+      try {
+        setProducts(JSON.parse(savedProducts));
+      } catch (error) {
+        console.error('Error al cargar productos guardados:', error);
+        setProducts([...allProductsData]);
+      }
+    } else {
+      setProducts([...allProductsData]);
+    }
+  }, []);
+
+  // Guardar productos en localStorage cuando cambien
+  useEffect(() => {
+    if (products.length > 0) {
+      localStorage.setItem('inversionesPoloProducts', JSON.stringify(products));
+    }
+  }, [products]);
+
+  const allProducts: Product[] = products;
 
   const categories = Array.from(
     new Set(allProducts.map((product) => product.category))
@@ -157,7 +180,7 @@ function App() {
     localStorage.removeItem('inversionesPoloSearchHistory');
   };
 
-  // ✅ addToCart con control de STOCK
+  // ✅ addToCart con control de STOCK y REDUCCIÓN automática
   const addToCart = (product: Product, quantity: number) => {
     if (product.stock <= 0) {
       setToastMessage(`No hay stock disponible de ${product.name}.`);
@@ -184,6 +207,15 @@ function App() {
       }
     });
 
+    // REDUCIR STOCK DEL PRODUCTO
+    setProducts((prevProducts) =>
+      prevProducts.map((p) =>
+        p.id === product.id
+          ? { ...p, stock: Math.max(0, p.stock - quantity) }
+          : p
+      )
+    );
+
     setToastMessage(`${product.name} agregado al carrito.`);
   };
 
@@ -196,10 +228,34 @@ function App() {
   };
 
   const removeFromCart = (id: number) => {
+    // Encontrar el producto en el carrito para recuperar su cantidad
+    const cartItem = cartItems.find((item) => item.id === id);
+    if (cartItem) {
+      // RESTAURAR STOCK al producto original
+      setProducts((prevProducts) =>
+        prevProducts.map((p) =>
+          p.id === id
+            ? { ...p, stock: p.stock + cartItem.quantity }
+            : p
+        )
+      );
+    }
+    
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const clearCart = () => {
+    // RESTAURAR STOCK de todos los productos en el carrito
+    cartItems.forEach((item) => {
+      setProducts((prevProducts) =>
+        prevProducts.map((p) =>
+          p.id === item.id
+            ? { ...p, stock: p.stock + item.quantity }
+            : p
+        )
+      );
+    });
+    
     setCartItems([]);
   };
 
