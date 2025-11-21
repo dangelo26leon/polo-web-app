@@ -200,7 +200,7 @@ ${itemsList}
             <ArrowLeft className="w-5 h-5 mr-2" />
             Volver al Carrito
           </button>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Finalizar Compra</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">✅ CHECKOUT FINAL - rama-cambio-2</h1>
         </div>
 
         {/* Progress Steps */}
