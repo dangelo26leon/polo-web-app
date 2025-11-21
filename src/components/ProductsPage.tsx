@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ProductCard from './ProductCard';
 import SearchFilter from './SearchFilter';
 import { Package, ArrowLeft } from 'lucide-react';
@@ -11,6 +11,7 @@ interface Product {
   rating: number;
   category: string;
   description?: string;
+  stock: number;
 }
 
 interface ProductsPageProps {
