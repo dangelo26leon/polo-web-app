@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X, ShoppingCart, Phone, MapPin, Mail, Home, Package, Search, User, LogOut, Heart, Sun, Moon } from 'lucide-react';
 import logoPolo from '/images/logo_polo.png';
+import BigTextToggle from './BigTextToggle';
 
 interface UserData {
   id: string;
@@ -136,6 +137,7 @@ const Header: React.FC<HeaderProps> = ({
                   <Moon className="w-5 h-5" />
                 )}
               </button>
+              <BigTextToggle></BigTextToggle>
               <button 
                 onClick={onCartClick}
                 className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg flex items-center transition-colors relative"
