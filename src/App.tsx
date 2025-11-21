@@ -21,6 +21,7 @@ interface Product {
   rating: number;
   category: string;
   description?: string;
+  stock: number; // 👈 NUEVO
 }
 
 interface CartItem extends Product {
@@ -144,20 +145,33 @@ function App() {
     localStorage.removeItem('inversionesPoloSearchHistory');
   };
 
+  // ✅ addToCart con control de STOCK
   const addToCart = (product: Product, quantity: number) => {
+    if (product.stock <= 0) {
+      setToastMessage(`No hay stock disponible de ${product.name}.`);
+      return;
+    }
+
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === product.id);
+      const currentQuantity = existingItem ? existingItem.quantity : 0;
+      const maxQuantity = product.stock;
+
+      const desiredQuantity = currentQuantity + quantity;
+      const finalQuantity =
+        desiredQuantity > maxQuantity ? maxQuantity : desiredQuantity;
 
       if (existingItem) {
         return prevItems.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: finalQuantity }
             : item
         );
       } else {
-        return [...prevItems, { ...product, quantity }];
+        return [...prevItems, { ...product, quantity: finalQuantity }];
       }
     });
+
     setToastMessage(`${product.name} agregado al carrito.`);
   };
 
