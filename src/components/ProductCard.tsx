@@ -188,7 +188,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           }`}
         >
           <ShoppingCart className="w-4 h-4 mr-2" />
-          {isOutOfStock ? 'Agotado' : 'Agregar al Carrito'}
+          {isOutOfStock ? 'Agotado' : `Agregar ${quantity} unidad(es)`}
         </button>
         
         <button 
