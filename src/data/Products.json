@@ -6,7 +6,8 @@
     "image": "https://rimage.ripley.com.pe/home.ripley/Attachment/MKP/702/PMP00003044128/full_image-1.webp", 
     "rating": 4.5, 
     "category": "Electrodomésticos",
-    "description": "Arrocera eléctrica de 1.8L con función de mantener caliente y cocción automática."
+    "description": "Arrocera eléctrica de 1.8L con función de mantener caliente y cocción automática.",
+    "stock": 12
   },
   { 
     "id": 2, 
@@ -15,7 +16,8 @@
     "image": "https://home.ripley.com.pe/Attachment/WOP_5/2019312376558/2019312376558_2.jpg",  
     "rating": 4.8, 
     "category": "Electrodomésticos",
-    "description": "Licuadora de alta potencia con 5 velocidades y jarra de vidrio resistente."
+    "description": "Licuadora de alta potencia con 5 velocidades y jarra de vidrio resistente.",
+    "stock": 8
   },
   { 
     "id": 3, 
@@ -24,7 +26,8 @@
     "image": "https://rimage.ripley.com.pe/home.ripley/Attachment/WOP/1/2019338973328/full_image-2019338973328.jpg", 
     "rating": 4.3, 
     "category": "Electrodomésticos",
-    "description": "Tostadora de 4 rebanadas con 7 niveles de tostado y bandeja recogemigas extraíble."
+    "description": "Tostadora de 4 rebanadas con 7 niveles de tostado y bandeja recogemigas extraíble.",
+    "stock": 0
   },
   { 
     "id": 4, 
@@ -33,7 +36,8 @@
     "image": "https://osterpe.vtexassets.com/arquivos/ids/156585-1600-auto?v=637492689214070000&width=1600&height=auto&aspect=true", 
     "rating": 4.6, 
     "category": "Electrodomésticos",
-    "description": "Batidora de mano con 6 velocidades y accesorios incluidos."
+    "description": "Batidora de mano con 6 velocidades y accesorios incluidos.",
+    "stock": 10
   },
   { 
     "id": 5, 
@@ -42,7 +46,8 @@
     "image": "http://home.ripley.com.pe/Attachment/WOP_5/2019321652148/2019321652148_2.jpg", 
     "rating": 4.4, 
     "category": "Electrodomésticos",
-    "description": "Plancha de vapor con suela antiadherente, 2 niveles de vapor y función autolimpieza."
+    "description": "Plancha de vapor con suela antiadherente, 2 niveles de vapor y función autolimpieza.",
+    "stock": 20
   },
   { 
     "id": 6, 
@@ -51,7 +56,8 @@
     "image": "https://promart.vteximg.com.br/arquivos/ids/8510663-1000-1000/imageUrl_1.jpg?v=638705341603330000", 
     "rating": 4.4, 
     "category": "Tecnología",
-    "description": "Cargador de carga rápida compatible con laptops y dispositivos móviles."
+    "description": "Cargador de carga rápida compatible con laptops y dispositivos móviles.",
+    "stock": 25
   },
   { 
     "id": 7, 
@@ -60,7 +66,8 @@
     "image": "https://oechsle.vteximg.com.br/arquivos/ids/19773389-1000-1000/imageUrl_2.jpg?v=638673301908100000", 
     "rating": 4.7, 
     "category": "Tecnología",
-    "description": "Audífonos inalámbricos con cancelación de ruido y 30 horas de batería."
+    "description": "Audífonos inalámbricos con cancelación de ruido y 30 horas de batería.",
+    "stock": 7
   },
   { 
     "id": 8, 
@@ -69,7 +76,8 @@
     "image": "https://promart.vteximg.com.br/arquivos/ids/2128560-1000-1000/10093308.jpg?v=637680073113370000", 
     "rating": 4.2, 
     "category": "Tecnología",
-    "description": "Adaptador HDMI compatible con resolución 4K y audio de alta definición."
+    "description": "Adaptador HDMI compatible con resolución 4K y audio de alta definición.",
+    "stock": 30
   },
   { 
     "id": 9, 
@@ -78,7 +86,8 @@
     "image": "https://todatecnologia.pe/wp-content/uploads/2024/06/Cable-UGREEN-USB-C-a-Lightning-Cable-MFI-Certificado-PD-Carga-Rapida-Compatible-con-iPhone-iPad-Pro-3-600x600.png", 
     "rating": 4.5, 
     "category": "Tecnología",
-    "description": "Cable Lightning certificado MFi de 2 metros con carga rápida."
+    "description": "Cable Lightning certificado MFi de 2 metros con carga rápida.",
+    "stock": 18
   },
   { 
     "id": 10, 
@@ -87,7 +96,8 @@
     "image": "https://www.record.com.pe/wp-content/uploads/2021/05/2_2106500002_2.jpg", 
     "rating": 4.5, 
     "category": "Electrodomésticos",
-    "description": "Freidora de aire record inoxidable collection 2.5L."
+    "description": "Freidora de aire record inoxidable collection 2.5L.",
+    "stock": 5
   },
   { 
     "id": 11, 
@@ -96,7 +106,8 @@
     "image": "https://electroabad.pe/wp-content/uploads/2020/07/BVSTDCDR5B_0-2.jpg", 
     "rating": 4.2, 
     "category": "Electrodomésticos",
-    "description": "Cafetera 12 tzs con pantalla táctil programable Oster."
+    "description": "Cafetera 12 tzs con pantalla táctil programable Oster.",
+    "stock": 6
   },
   { 
     "id": 12, 
@@ -105,7 +116,8 @@
     "image": "https://rimage.ripley.com.pe/home.ripley/Attachment/MKP/2095/PMP20000309369/imagen2-1.jpeg", 
     "rating": 4.0, 
     "category": "Electrodomésticos",
-    "description": "Capacidad de 1.2 L. - Base antideslizante - Cono exprimidor doble."
+    "description": "Capacidad de 1.2 L. - Base antideslizante - Cono exprimidor doble.",
+    "stock": 14
   },
   { 
     "id": 13, 
@@ -114,7 +126,8 @@
     "image": "https://home.ripley.com.pe/Attachment/WOP_5/2019281130182/2019281130182-2.jpg", 
     "rating": 4.5, 
     "category": "Electrodomésticos",
-    "description": "Hervidor Oster eléctrico negro BVSTKT3101 1.7L."
+    "description": "Hervidor Oster eléctrico negro BVSTKT3101 1.7L.",
+    "stock": 9
   },
   { 
     "id": 14, 
@@ -123,7 +136,8 @@
     "image": "https://media.falabella.com/falabellaPE/20556491_3/w=800,h=800,fit=pad", 
     "rating": 4.0, 
     "category": "Electrodomésticos",
-    "description": "La nueva Waflera Sweet Cooking de Taurus será tu mejor aliada para obtener unos Waffles perfectos."
+    "description": "La nueva Waflera Sweet Cooking de Taurus será tu mejor aliada para obtener unos Waffles perfectos.",
+    "stock": 4
   },
   { 
     "id": 15, 
@@ -132,7 +146,8 @@
     "image": "https://rimage.ripley.com.pe/home.ripley/Attachment/MKP/3932/PMP20000715072/full_image-1.png", 
     "rating": 4.1, 
     "category": "Electrodomésticos",
-    "description": "Prepara exquisitos sándwiches, omelettes o paninis con esta increíble sandwichera 3-en-1."
+    "description": "Prepara exquisitos sándwiches, omelettes o paninis con esta increíble sandwichera 3-en-1.",
+    "stock": 16
   },
   { 
     "id": 16, 
@@ -141,7 +156,8 @@
     "image": "https://osterpe.vtexassets.com/arquivos/ids/156074-800-auto?v=637279182621530000&width=800&height=auto&aspect=true", 
     "rating": 4.0, 
     "category": "Electrodomésticos",
-    "description": "Motor potente y duradero para preparar todo tipo de jugos, incluso de las frutas y vegetales más duros."
+    "description": "Motor potente y duradero para preparar todo tipo de jugos, incluso de las frutas y vegetales más duros.",
+    "stock": 11
   },
   { 
     "id": 17, 
@@ -150,7 +166,8 @@
     "image": "https://media.falabella.com/falabellaPE/117158616_01/w=800,h=800,fit=pad", 
     "rating": 4.2, 
     "category": "Tecnología",
-    "description": "La Tp-Link Tapo L530E es una bombilla de luz Wi-Fi inteligente multicolor."
+    "description": "La Tp-Link Tapo L530E es una bombilla de luz Wi-Fi inteligente multicolor.",
+    "stock": 22
   },
   { 
     "id": 18, 
@@ -159,7 +176,8 @@
     "image": "https://media.falabella.com/falabellaPE/122559405_01/w=1500,h=1500,fit=pad", 
     "rating": 4.5, 
     "category": "Tecnología",
-    "description": "Cinta luz RGB 5 metros + control."
+    "description": "Cinta luz RGB 5 metros + control.",
+    "stock": 19
   },
   { 
     "id": 19, 
@@ -168,7 +186,8 @@
     "image": "https://dasmitec.pe/wp-content/uploads/2024/12/FVR-2202.1.jpg", 
     "rating": 4.2, 
     "category": "Tecnología",
-    "description": "Estabilizador Forza 8 TOMAS/900VA FVR-902."
+    "description": "Estabilizador Forza 8 TOMAS/900VA FVR-902.",
+    "stock": 13
   },
   { 
     "id": 20, 
@@ -177,7 +196,8 @@
     "image": "https://rimage.ripley.com.pe/home.ripley/Attachment/MKP/4348/PMP20000829411/full_image-1.png", 
     "rating": 4.3, 
     "category": "Tecnología",
-    "description": "Parlantes Bluetooth Elite J1 60W, certificación IPX6 y 16 horas de autonomía."
+    "description": "Parlantes Bluetooth Elite J1 60W, certificación IPX6 y 16 horas de autonomía.",
+    "stock": 6
   },
   { 
     "id": 21, 
@@ -186,7 +206,8 @@
     "image": "https://media.falabella.com/falabellaPE/141369551_01/w=800,h=800,fit=pad", 
     "rating": 4.9,
     "category": "Tecnología",
-    "description": "Audífonos Xiaomi In Ear negro Redmi Buds 6 Lite Bluetooth."
+    "description": "Audífonos Xiaomi In Ear negro Redmi Buds 6 Lite Bluetooth.",
+    "stock": 15
   },
   { 
     "id": 22, 
@@ -195,7 +216,8 @@
     "image": "https://www.lacuracao.pe/media/catalog/product/t/e/tecladomousewirn_1.jpg?quality=80&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700", 
     "rating": 4.6,
     "category": "Tecnología",
-    "description": "Kit teclado inalámbrico y mouse negro."
+    "description": "Kit teclado inalámbrico y mouse negro.",
+    "stock": 9
   },
   { 
     "id": 23, 
@@ -204,7 +226,8 @@
     "image": "https://carsaperupoc.vtexassets.com/arquivos/ids/161677-1200-auto?v=638657751265170000&width=1200&height=auto&aspect=true", 
     "rating": 4.5,
     "category": "Electrodomésticos",
-    "description": "Prepara arroz de manera rápida y eficiente con la olla arrocera Imaco RC006N de 0.6 litros en color negro."
+    "description": "Prepara arroz de manera rápida y eficiente con la olla arrocera Imaco RC006N de 0.6 litros en color negro.",
+    "stock": 8
   },
   { 
     "id": 24, 
@@ -213,7 +236,8 @@
     "image": "https://production-tailoy-repo-magento-statics.s3.amazonaws.com/imagenes/872x872/productos/i/c/a/calculadora-cientifica-casio-fx-95-7673-default-1.jpg", 
     "rating": 4.7,
     "category": "Tecnología",
-    "description": "Funciones matemáticas básicas y cantidad de funciones: 274."
+    "description": "Funciones matemáticas básicas y cantidad de funciones: 274.",
+    "stock": 12
   },
   { 
     "id": 25, 
@@ -222,7 +246,8 @@
     "image": "https://plazavea.vteximg.com.br/arquivos/ids/5334496-1000-1000/image-1f8a0817c76c4e78b453ec1d3a111e9f.jpg", 
     "rating": 4.8,
     "category": "Tecnología",
-    "description": "Compatible con PC, PS2, PS3, PC360(XBOX), Android y Smart TV Box. Transmisión inalámbrica de hasta 8 metros."
+    "description": "Compatible con PC, PS2, PS3, PC360(XBOX), Android y Smart TV Box. Transmisión inalámbrica de hasta 8 metros.",
+    "stock": 10
   },
   {
     "id": 26,
@@ -231,7 +256,8 @@
     "image": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQPf3yRcQRUAJLrDXaDe9DEAAZEVjgNye786DMmDW0MHxgQH60sK-V4E0DQCO3x5HrrAAzXixTEMZTt_Hs99eSyd-6RaAIk0Jj1hlnMnJ__5Zkele0ITvKbtl81HEVpSXORHsWgtancpg&usqp=CAc",
     "rating": 4.6,
     "category": "Electrodomésticos",
-    "description": "Microondas digital de 30 litros con función grill, pantalla LED y 10 niveles de potencia."
+    "description": "Microondas digital de 30 litros con función grill, pantalla LED y 10 niveles de potencia.",
+    "stock": 4
   },
   {
     "id": 27,
@@ -240,7 +266,8 @@
     "image": "https://production-tailoy-repo-magento-statics.s3.amazonaws.com/imagenes/872x872/productos/i/r/e/refrigeradora-no-frost-250l-grafito-58301-default-2.jpg",
     "rating": 4.8,
     "category": "Electrodomésticos",
-    "description": "Refrigeradora de bajo consumo con sistema No Frost, diseño elegante y compartimiento de congelación rápida."
+    "description": "Refrigeradora de bajo consumo con sistema No Frost, diseño elegante y compartimiento de congelación rápida.",
+    "stock": 3
   },
   {
     "id": 28,
@@ -249,7 +276,8 @@
     "image": "https://http2.mlstatic.com/D_NQ_NP_957520-MLU73783519838_012024-O.webp",
     "rating": 4.7,
     "category": "Electrodomésticos",
-    "description": "Aspiradora sin bolsa con tecnología ciclónica, filtro HEPA lavable y cable retráctil automático."
+    "description": "Aspiradora sin bolsa con tecnología ciclónica, filtro HEPA lavable y cable retráctil automático.",
+    "stock": 6
   },
   {
     "id": 29,
@@ -258,7 +286,8 @@
     "image": "https://oechsle.vteximg.com.br/arquivos/ids/21824695/imageUrl_1.jpg?v=638903180244770000",
     "rating": 4.3,
     "category": "Electrodomésticos",
-    "description": "Ventilador de torre oscilante de 45W con control de velocidad y temporizador de apagado automático."
+    "description": "Ventilador de torre oscilante de 45W con control de velocidad y temporizador de apagado automático.",
+    "stock": 9
   },
   {
     "id": 30,
@@ -267,6 +296,7 @@
     "image": "https://imaco.pe/cdn/shop/files/HEB25R-producc_730975a7-1c93-4e57-a2f4-5e16c69f528c.jpg?v=1726256618&width=1946",
     "rating": 4.5,
     "category": "Electrodomésticos",
-    "description": "Horno eléctrico de 25 litros con función de asado, parrilla removible y control de temperatura ajustable."
+    "description": "Horno eléctrico de 25 litros con función de asado, parrilla removible y control de temperatura ajustable.",
+    "stock": 5
   }
 ]

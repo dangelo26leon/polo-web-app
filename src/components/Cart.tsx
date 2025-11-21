@@ -16,6 +16,7 @@ interface CartItem {
   image: string;
   quantity: number;
   category: string;
+  stock: number;
 }
 
 interface CartProps {
@@ -39,10 +40,23 @@ const Cart: React.FC<CartProps> = ({
   onProceedToCheckout,
   user
 }) => {
+
+  // Convierte "S/ 1,299.00" a número
+  const parsePrice = (price: string) => {
+    const clean = price
+      .replace('S/', '')
+      .replace('S/.', '')
+      .replace('s/', '')
+      .replace(',', '')
+      .trim();
+    const value = parseFloat(clean);
+    return isNaN(value) ? 0 : value;
+  };
+
   const getTotalPrice = () => {
     return items.reduce((total, item) => {
-      const price = parseFloat(item.price.replace('S/ ', ''));
-      return total + (price * item.quantity);
+      const price = parsePrice(item.price);
+      return total + price * item.quantity;
     }, 0);
   };
 
@@ -87,44 +101,92 @@ const Cart: React.FC<CartProps> = ({
               </div>
             ) : (
               <div className="space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                    
-                    <div className="flex-1">
-                      <h3 className="font-medium text-gray-900 dark:text-white text-sm">{item.name}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{item.category}</p>
-                      <p className="text-green-700 font-semibold">{item.price}</p>
-                      
-                      <div className="flex items-center mt-2">
-                        <button 
-                          onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                          className="p-1 hover:bg-gray-200 rounded transition-colors"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="px-2 text-sm">{item.quantity}</span>
-                        <button 
-                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                          className="p-1 hover:bg-gray-200 rounded transition-colors"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <button 
-                      onClick={() => onRemoveItem(item.id)}
-                      className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                {items.map((item) => {
+                  const isOutOfStock = item.stock === 0;
+                  const nearLimit = item.stock > 0 && item.stock <= 3;
+
+                  let stockText = '';
+                  let stockColor = '';
+
+                  if (isOutOfStock) {
+                    stockText = 'Sin stock disponible';
+                    stockColor = 'text-red-600 dark:text-red-400';
+                  } else if (nearLimit) {
+                    stockText = `Últimas ${item.stock} unidades`;
+                    stockColor = 'text-orange-600 dark:text-orange-400';
+                  } else {
+                    stockText = `Stock: ${item.stock}`;
+                    stockColor = 'text-green-700 dark:text-green-400';
+                  }
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"
                     >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
+                      <img 
+                        src={item.image} 
+                        alt={item.name}
+                        className="w-16 h-16 object-cover rounded-lg"
+                      />
+                      
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900 dark:text-white text-sm">
+                          {item.name}
+                        </h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                          {item.category}
+                        </p>
+                        <p className="text-green-700 font-semibold">
+                          {item.price}
+                        </p>
+                        <p className={`text-xs mt-1 ${stockColor}`}>
+                          {stockText}
+                        </p>
+                        
+                        <div className="flex items-center mt-2">
+                          <button 
+                            onClick={() =>
+                              onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))
+                            }
+                            disabled={item.quantity <= 1}
+                            className={`p-1 rounded transition-colors ${
+                              item.quantity <= 1
+                                ? 'opacity-40 cursor-not-allowed'
+                                : 'hover:bg-gray-200'
+                            }`}
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="px-2 text-sm">{item.quantity}</span>
+                          <button 
+                            onClick={() =>
+                              onUpdateQuantity(
+                                item.id,
+                                Math.min(item.stock, item.quantity + 1)
+                              )
+                            }
+                            disabled={item.quantity >= item.stock || isOutOfStock}
+                            className={`p-1 rounded transition-colors ${
+                              item.quantity >= item.stock || isOutOfStock
+                                ? 'opacity-40 cursor-not-allowed'
+                                : 'hover:bg-gray-200'
+                            }`}
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <button 
+                        onClick={() => onRemoveItem(item.id)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
