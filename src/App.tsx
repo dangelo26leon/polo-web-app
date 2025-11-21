@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import ProductCard from './components/ProductCard';
 import ProductsPage from './components/ProductsPage';
@@ -52,6 +52,7 @@ function App() {
   const [user, setUser] = useState<UserData | null>(null);
   const [toastMessage, setToastMessage] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const allProducts: Product[] = [...allProductsData];
 
@@ -77,6 +78,7 @@ function App() {
     const savedSearchHistory = localStorage.getItem(
       'inversionesPoloSearchHistory'
     );
+    const savedDarkMode = localStorage.getItem('inversionesPoloDarkMode');
 
     if (savedCart) {
       setCartItems(JSON.parse(savedCart));
@@ -95,6 +97,16 @@ function App() {
         setSearchHistory(JSON.parse(savedSearchHistory));
       } catch (error) {
         console.error('Error parsing inversionesPoloSearchHistory', error);
+      }
+    }
+
+    if (savedDarkMode) {
+      const isDark = JSON.parse(savedDarkMode);
+      setIsDarkMode(isDark);
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
     }
   }, []);
@@ -259,10 +271,21 @@ function App() {
     }
   };
 
+  const toggleTheme = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    localStorage.setItem('inversionesPoloDarkMode', JSON.stringify(newDarkMode));
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   // If we're on the auth page, render the AuthPage component
   if (currentPage === 'auth') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header
           cartItems={getTotalCartItems()}
           onCartClick={() => setIsCartOpen(true)}
@@ -270,6 +293,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -301,7 +325,7 @@ function App() {
   // If we're on the profile page, render the UserProfile component
   if (currentPage === 'profile') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header
           cartItems={getTotalCartItems()}
           onCartClick={() => setIsCartOpen(true)}
@@ -309,6 +333,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -344,7 +369,7 @@ function App() {
   // If we're on the favorites page, render the FavoritesPage component
   if (currentPage === 'favorites') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header
           cartItems={getTotalCartItems()}
           onCartClick={() => setIsCartOpen(true)}
@@ -352,6 +377,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -386,7 +412,7 @@ function App() {
   // If we're on the checkout page, render the CheckoutPage component
   if (currentPage === 'checkout') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header
           cartItems={getTotalCartItems()}
           onCartClick={() => setIsCartOpen(true)}
@@ -394,6 +420,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -427,7 +454,7 @@ function App() {
   // If we're on the products page, render the ProductsPage component
   if (currentPage === 'products') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header
           cartItems={getTotalCartItems()}
           onCartClick={() => setIsCartOpen(true)}
@@ -435,6 +462,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -468,7 +496,7 @@ function App() {
 
   // Home page content
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header
         cartItems={getTotalCartItems()}
         onCartClick={() => setIsCartOpen(true)}
@@ -476,6 +504,7 @@ function App() {
         onNavigate={setCurrentPage}
         user={user}
         onProfileClick={() => setCurrentPage('profile')}
+        onToggleTheme={toggleTheme}
       />
 
       <Cart
@@ -499,7 +528,7 @@ function App() {
       {/* Hero Section */}
       <section
         id="inicio"
-        className="bg-gradient-to-r from-green-800 to-green-600 text-white"
+        className="bg-gradient-to-r from-green-800 to-green-600 text-white dark:from-green-900 dark:to-green-700"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
@@ -530,13 +559,13 @@ function App() {
       </section>
 
       {/* Products Section */}
-      <section id="productos" className="py-16">
+      <section id="productos" className="py-16 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Nuestros Productos
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto dark:text-gray-300">
               Ofrecemos una amplia variedad de electrodomésticos y tecnología de
               alta calidad
             </p>
@@ -602,13 +631,13 @@ function App() {
       </section>
 
       {/* About Section */}
-      <section id="sobre-nosotros" className="py-16 bg-green-50">
+      <section id="sobre-nosotros" className="py-16 bg-green-50 dark:bg-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Sobre Nosotros
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
               Inversiones Polo es una empresa familiar con más de 10 años de
               experiencia en el mercado. Nos dedicamos a ofrecer productos de
               alta calidad a precios competitivos, siempre con el mejor servicio
@@ -618,39 +647,39 @@ function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-green-600">
                 <Package className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Calidad Garantizada
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Todos nuestros productos cuentan con garantía y certificaciones
                 de calidad
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-green-600">
                 <Phone className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Atención 24/7
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Nuestro equipo está disponible para ayudarte en cualquier
                 momento
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-green-600">
                 <MapPin className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Entrega Rápida
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Realizamos entregas en toda la ciudad de forma rápida y segura
               </p>
             </div>
@@ -659,13 +688,13 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contacto" className="py-16 bg-gray-900 text-white">
+      <section id="contacto" className="py-16 bg-gray-900 dark:bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               Contáctanos
             </h2>
-            <p className="text-lg text-gray-300">
+            <p className="text-lg text-gray-300 dark:text-gray-400">
               Estamos aquí para ayudarte. No dudes en contactarnos
             </p>
           </div>
@@ -735,7 +764,7 @@ function App() {
               </ul>
             </div>
             <div className="text-center md:text-right">
-              <p className="text-gray-400">
+              <p className="text-gray-400 dark:text-gray-500">
                 © 2025 Inversiones Polo. Todos los derechos reservados.
               </p>
             </div>

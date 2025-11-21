@@ -1,4 +1,3 @@
-import React from "react";
 import ProductCard from "./ProductCard";
 import { Heart, ArrowLeft } from "lucide-react";
 
@@ -10,6 +9,7 @@ interface Product {
   rating: number;
   category: string;
   description?: string;
+  stock: number;
 }
 
 interface FavoritesPageProps {
