@@ -161,7 +161,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             >
               <Minus className="w-4 h-4 dark:text-gray-300" />
             </button>
-            <span className="px-3 py-1 border-x dark:border-gray-600 dark:text-gray-300">
+            <span className="px-3 py-1 border-x dark:border-gray-600 dark:text-white bg-green-100 dark:bg-green-700 font-semibold">
               {quantity}
             </span>
             <button 
