@@ -10,7 +10,7 @@ import SearchFilter from './components/SearchFilter';
 import FavoritesPage from './components/FavoritePage';
 import Toast from './components/Toast';
 import allProductsData from './data/Products.json';
-import { Package, Phone, MapPin, Mail, Star, Heart } from 'lucide-react';
+import { Package, Phone, MapPin, Mail } from 'lucide-react';
 import logoPolo from '/images/logo_polo.png';
 
 interface Product {
@@ -40,7 +40,9 @@ interface UserData {
 }
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'checkout' | 'auth' | 'profile' | 'favorites'>('home');
+  const [currentPage, setCurrentPage] = useState<
+    'home' | 'products' | 'checkout' | 'auth' | 'profile' | 'favorites'
+  >('home');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -48,51 +50,51 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [user, setUser] = useState<UserData | null>(null);
   const [toastMessage, setToastMessage] = useState('');
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
 
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const allProducts: Product[] = [...allProductsData];
 
-  // Lógica para aplicar la clase 'dark' al <html> y guardar la preferencia
-  useEffect(() => {
-    const root = window.document.documentElement;
-    const isDark = theme === 'dark';
-
-    root.classList.remove(isDark ? 'light' : 'dark');
-    root.classList.add(isDark ? 'dark' : 'light');
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-  
-  // Función de alternancia que usarás en el botón del Header
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-  const allProducts: Product[] = [ ...allProductsData];
-
-  const categories = Array.from(new Set(allProducts.map(product => product.category)));
+  const categories = Array.from(
+    new Set(allProducts.map((product) => product.category))
+  );
 
   // Filter products based on search and category
-  const filteredProducts = allProducts.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === '' || product.category === selectedCategory;
+  const filteredProducts = allProducts.filter((product) => {
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === '' || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  // Load cart from localStorage on component mount
+  // Load data from localStorage on component mount
   useEffect(() => {
     const savedCart = localStorage.getItem('inversionesPoloCart');
     const savedFavorites = localStorage.getItem('inversionesPoloFavorites');
     const savedUser = localStorage.getItem('inversionesPoloCurrentUser');
-    
+    const savedSearchHistory = localStorage.getItem(
+      'inversionesPoloSearchHistory'
+    );
+
     if (savedCart) {
       setCartItems(JSON.parse(savedCart));
     }
-    
+
     if (savedFavorites) {
       setFavorites(JSON.parse(savedFavorites));
     }
-    
+
     if (savedUser) {
       setUser(JSON.parse(savedUser));
+    }
+
+    if (savedSearchHistory) {
+      try {
+        setSearchHistory(JSON.parse(savedSearchHistory));
+      } catch (error) {
+        console.error('Error parsing inversionesPoloSearchHistory', error);
+      }
     }
   }, []);
 
@@ -103,15 +105,51 @@ function App() {
 
   // Save favorites to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('inversionesPoloFavorites', JSON.stringify(favorites));
+    localStorage.setItem(
+      'inversionesPoloFavorites',
+      JSON.stringify(favorites)
+    );
   }, [favorites]);
 
+  // Manejar cambios en el texto del buscador (solo cambia el término, no guarda historial aún)
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term);
+  };
+
+  // Guardar una búsqueda completa en el historial
+  const handleCommitSearch = (term: string) => {
+    const cleanTerm = term.trim();
+    if (cleanTerm.length === 0) return;
+
+    setSearchHistory((prev) => {
+      const filtered = prev.filter(
+        (t) => t.toLowerCase() !== cleanTerm.toLowerCase()
+      );
+      const updated = [cleanTerm, ...filtered].slice(0, 5);
+      localStorage.setItem(
+        'inversionesPoloSearchHistory',
+        JSON.stringify(updated)
+      );
+      return updated;
+    });
+  };
+
+  const handleSearchFromHistory = (term: string) => {
+    setSearchTerm(term);
+    handleCommitSearch(term);
+  };
+
+  const handleClearSearchHistory = () => {
+    setSearchHistory([]);
+    localStorage.removeItem('inversionesPoloSearchHistory');
+  };
+
   const addToCart = (product: Product, quantity: number) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
-      
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === product.id);
+
       if (existingItem) {
-        return prevItems.map(item =>
+        return prevItems.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
@@ -124,15 +162,15 @@ function App() {
   };
 
   const updateCartQuantity = (id: number, quantity: number) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === id ? { ...item, quantity } : item
       )
     );
   };
 
   const removeFromCart = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const clearCart = () => {
@@ -156,7 +194,10 @@ function App() {
 
   const handleLogin = (userData: UserData) => {
     setUser(userData);
-    localStorage.setItem('inversionesPoloCurrentUser', JSON.stringify(userData));
+    localStorage.setItem(
+      'inversionesPoloCurrentUser',
+      JSON.stringify(userData)
+    );
     setCurrentPage('checkout');
   };
 
@@ -168,14 +209,17 @@ function App() {
 
   const handleUpdateUser = (userData: UserData) => {
     setUser(userData);
-    localStorage.setItem('inversionesPoloCurrentUser', JSON.stringify(userData));
+    localStorage.setItem(
+      'inversionesPoloCurrentUser',
+      JSON.stringify(userData)
+    );
   };
 
   const toggleFavorite = (productId: number) => {
-    setFavorites(prevFavorites => { 
+    setFavorites((prevFavorites) => {
       if (prevFavorites.includes(productId)) {
         setToastMessage('Producto eliminado de favoritos.');
-        return prevFavorites.filter(id => id !== productId);
+        return prevFavorites.filter((id) => id !== productId);
       } else {
         setToastMessage('Producto agregado a favoritos.');
         return [...prevFavorites, productId];
@@ -204,15 +248,14 @@ function App() {
   // If we're on the auth page, render the AuthPage component
   if (currentPage === 'auth') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header 
-          cartItems={getTotalCartItems()} 
-          onCartClick={() => setIsCartOpen(true)} 
+      <div className="min-h-screen bg-gray-50">
+        <Header
+          cartItems={getTotalCartItems()}
+          onCartClick={() => setIsCartOpen(true)}
           currentPage={currentPage}
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
-          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -226,7 +269,12 @@ function App() {
           user={user}
         />
 
-        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />} 
+        {toastMessage && (
+          <Toast
+            message={toastMessage}
+            onClose={() => setToastMessage('')}
+          />
+        )}
 
         <AuthPage
           onBack={() => setCurrentPage('home')}
@@ -239,15 +287,14 @@ function App() {
   // If we're on the profile page, render the UserProfile component
   if (currentPage === 'profile') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header 
-          cartItems={getTotalCartItems()} 
-          onCartClick={() => setIsCartOpen(true)} 
+      <div className="min-h-screen bg-gray-50">
+        <Header
+          cartItems={getTotalCartItems()}
+          onCartClick={() => setIsCartOpen(true)}
           currentPage={currentPage}
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
-          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -261,7 +308,12 @@ function App() {
           user={user}
         />
 
-        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+        {toastMessage && (
+          <Toast
+            message={toastMessage}
+            onClose={() => setToastMessage('')}
+          />
+        )}
 
         {user && (
           <UserProfile
@@ -278,15 +330,14 @@ function App() {
   // If we're on the favorites page, render the FavoritesPage component
   if (currentPage === 'favorites') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header 
-          cartItems={getTotalCartItems()} 
-          onCartClick={() => setIsCartOpen(true)} 
+      <div className="min-h-screen bg-gray-50">
+        <Header
+          cartItems={getTotalCartItems()}
+          onCartClick={() => setIsCartOpen(true)}
           currentPage={currentPage}
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
-          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -300,7 +351,12 @@ function App() {
           user={user}
         />
 
-        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+        {toastMessage && (
+          <Toast
+            message={toastMessage}
+            onClose={() => setToastMessage('')}
+          />
+        )}
 
         <FavoritesPage
           allProducts={allProducts}
@@ -316,15 +372,14 @@ function App() {
   // If we're on the checkout page, render the CheckoutPage component
   if (currentPage === 'checkout') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header 
-          cartItems={getTotalCartItems()} 
-          onCartClick={() => setIsCartOpen(true)} 
+      <div className="min-h-screen bg-gray-50">
+        <Header
+          cartItems={getTotalCartItems()}
+          onCartClick={() => setIsCartOpen(true)}
           currentPage={currentPage}
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
-          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -338,7 +393,12 @@ function App() {
           user={user}
         />
 
-        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+        {toastMessage && (
+          <Toast
+            message={toastMessage}
+            onClose={() => setToastMessage('')}
+          />
+        )}
 
         <CheckoutPage
           cartItems={cartItems}
@@ -353,15 +413,14 @@ function App() {
   // If we're on the products page, render the ProductsPage component
   if (currentPage === 'products') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header 
-          cartItems={getTotalCartItems()} 
-          onCartClick={() => setIsCartOpen(true)} 
+      <div className="min-h-screen bg-gray-50">
+        <Header
+          cartItems={getTotalCartItems()}
+          onCartClick={() => setIsCartOpen(true)}
           currentPage={currentPage}
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
-          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -375,7 +434,12 @@ function App() {
           user={user}
         />
 
-        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+        {toastMessage && (
+          <Toast
+            message={toastMessage}
+            onClose={() => setToastMessage('')}
+          />
+        )}
 
         <ProductsPage
           products={allProducts}
@@ -390,15 +454,14 @@ function App() {
 
   // Home page content
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header 
-        cartItems={getTotalCartItems()} 
-        onCartClick={() => setIsCartOpen(true)} 
+    <div className="min-h-screen bg-gray-50">
+      <Header
+        cartItems={getTotalCartItems()}
+        onCartClick={() => setIsCartOpen(true)}
         currentPage={currentPage}
         onNavigate={setCurrentPage}
         user={user}
         onProfileClick={() => setCurrentPage('profile')}
-        onToggleTheme={toggleTheme}
       />
 
       <Cart
@@ -412,26 +475,36 @@ function App() {
         user={user}
       />
 
-      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          onClose={() => setToastMessage('')}
+        />
+      )}
 
       {/* Hero Section */}
-      <section id="inicio" className="bg-gradient-to-r from-green-800 to-green-600 text-white dark:from-green-900 dark:to-green-700">
+      <section
+        id="inicio"
+        className="bg-gradient-to-r from-green-800 to-green-600 text-white"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              {user ? `¡Bienvenido ${user.firstName}!` : 'Bienvenidos a Inversiones Polo'}
+              {user
+                ? `¡Bienvenido ${user.firstName}!`
+                : 'Bienvenidos a Inversiones Polo'}
             </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-green-100 dark:text-green-200 ">
+            <p className="text-xl sm:text-2xl mb-8 text-green-100">
               Tu tienda de confianza para electrodomésticos y tecnología
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
+              <button
                 onClick={scrollToProducts}
                 className="bg-white text-green-800 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors"
               >
                 Ver Productos
               </button>
-              <button 
+              <button
                 onClick={scrollToContact}
                 className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-800 transition-colors"
               >
@@ -443,21 +516,28 @@ function App() {
       </section>
 
       {/* Products Section */}
-      <section id="productos" className="py-16 dark:bg-gray-800">
+      <section id="productos" className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Nuestros Productos</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Ofrecemos una amplia variedad de electrodomésticos y tecnología de alta calidad
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Nuestros Productos
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Ofrecemos una amplia variedad de electrodomésticos y tecnología de
+              alta calidad
             </p>
           </div>
 
           <SearchFilter
             searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
+            onSearchChange={handleSearchChange}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
             categories={categories}
+            searchHistory={searchHistory}
+            onClearHistory={handleClearSearchHistory}
+            onSearchFromHistory={handleSearchFromHistory}
+            onCommitSearch={handleCommitSearch}
           />
 
           {/* Show only first 8 products on home page */}
@@ -479,7 +559,7 @@ function App() {
               <button
                 onClick={() => {
                   setCurrentPage('products');
-                  window.scrollTo(0,0);
+                  window.scrollTo(0, 0);
                 }}
                 className="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
               >
@@ -490,8 +570,10 @@ function App() {
           {filteredProducts.length === 0 && (
             <div className="text-center py-12">
               <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">No se encontraron productos</p>
-              <button 
+              <p className="text-gray-500 text-lg">
+                No se encontraron productos
+              </p>
+              <button
                 onClick={() => {
                   setSearchTerm('');
                   setSelectedCategory('');
@@ -506,58 +588,79 @@ function App() {
       </section>
 
       {/* About Section */}
-      <section id="sobre-nosotros" className="py-16 bg-green-50 dark:bg-gray-800">
+      <section id="sobre-nosotros" className="py-16 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Sobre Nosotros</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Inversiones Polo es una empresa familiar con más de 10 años de experiencia en el mercado. 
-              Nos dedicamos a ofrecer productos de alta calidad a precios competitivos, 
-              siempre con el mejor servicio al cliente.
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Sobre Nosotros
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Inversiones Polo es una empresa familiar con más de 10 años de
+              experiencia en el mercado. Nos dedicamos a ofrecer productos de
+              alta calidad a precios competitivos, siempre con el mejor servicio
+              al cliente.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Calidad Garantizada</h3>
-              <p className="text-gray-600 dark:text-gray-400">Todos nuestros productos cuentan con garantía y certificaciones de calidad</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Calidad Garantizada
+              </h3>
+              <p className="text-gray-600">
+                Todos nuestros productos cuentan con garantía y certificaciones
+                de calidad
+              </p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Atención 24/7</h3>
-              <p className="text-gray-600 dark:text-gray-400">Nuestro equipo está disponible para ayudarte en cualquier momento</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Atención 24/7
+              </h3>
+              <p className="text-gray-600">
+                Nuestro equipo está disponible para ayudarte en cualquier
+                momento
+              </p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Entrega Rápida</h3>
-              <p className="text-gray-600 dark:text-gray-400">Realizamos entregas en toda la ciudad de forma rápida y segura</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Entrega Rápida
+              </h3>
+              <p className="text-gray-600">
+                Realizamos entregas en toda la ciudad de forma rápida y segura
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contacto" className="py-16 bg-gray-900 dark:bg-gray-950 text-white">
+      <section id="contacto" className="py-16 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Contáctanos</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Contáctanos
+            </h2>
             <p className="text-lg text-gray-300">
               Estamos aquí para ayudarte. No dudes en contactarnos
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-xl font-semibold mb-4">Información de Contacto</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Información de Contacto
+              </h3>
               <div className="space-y-4">
                 <div className="flex items-center">
                   <Phone className="w-5 h-5 text-green-400 mr-3" />
@@ -573,9 +676,11 @@ function App() {
                 </div>
               </div>
             </div>
-            
+
             <div>
-              <h3 className="text-xl font-semibold mb-4">Horarios de Atención</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Horarios de Atención
+              </h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Lunes - Viernes:</span>
@@ -596,20 +701,23 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 dark:bg-gray-950 text-white py-8">
+      <footer className="bg-gray-800 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
-              <img src={logoPolo} alt="Inversiones Polo Logo" className='h-10 w-10' />
+              <img
+                src={logoPolo}
+                alt="Inversiones Polo Logo"
+                className="h-10 w-10"
+              />
               <span className="text-lg font-semibold">Inversiones Polo</span>
             </div>
             <div className="flex items-center mb-4 md:mb-0">
-              <ul className='list-disc pl-5 space-y-1 text-base'>
+              <ul className="list-disc pl-5 space-y-1 text-base">
                 <li>León Valderrama Dangelo Alexander</li>
                 <li>Oyola Valverde Angel Sebastian</li>
                 <li>Torrejon Pereda Alejandro</li>
                 <li>Gomez Ramirez Andy</li>
-
               </ul>
             </div>
             <div className="text-center md:text-right">
