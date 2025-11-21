@@ -56,11 +56,11 @@ const Cart: React.FC<CartProps> = ({
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
       
-      <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
+      <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-gray-800 shadow-xl">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b">
-            <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+          <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
               <ShoppingBag className="w-5 h-5 mr-2" />
               Carrito de Compras
             </h2>
@@ -76,8 +76,8 @@ const Cart: React.FC<CartProps> = ({
           <div className="flex-1 overflow-y-auto p-4">
             {items.length === 0 ? (
               <div className="text-center py-8">
-                <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Tu carrito está vacío</p>
+                <ShoppingBag className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                <p className="text-gray-500 dark:text-gray-400">Tu carrito está vacío</p>
                 <button 
                   onClick={onClose}
                   className="mt-4 text-green-700 hover:text-green-800 font-medium"
@@ -88,7 +88,7 @@ const Cart: React.FC<CartProps> = ({
             ) : (
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg">
+                  <div key={item.id} className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                     <img 
                       src={item.image} 
                       alt={item.name}
@@ -96,8 +96,8 @@ const Cart: React.FC<CartProps> = ({
                     />
                     
                     <div className="flex-1">
-                      <h3 className="font-medium text-gray-900 text-sm">{item.name}</h3>
-                      <p className="text-xs text-gray-500 mb-1">{item.category}</p>
+                      <h3 className="font-medium text-gray-900 dark:text-white text-sm">{item.name}</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{item.category}</p>
                       <p className="text-green-700 font-semibold">{item.price}</p>
                       
                       <div className="flex items-center mt-2">
@@ -131,9 +131,9 @@ const Cart: React.FC<CartProps> = ({
 
           {/* Footer */}
           {items.length > 0 && (
-            <div className="border-t p-4 space-y-4">
+            <div className="border-t dark:border-gray-700 p-4 space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold">Total:</span>
+                <span className="text-lg font-semibold dark:text-white">Total:</span>
                 <span className="text-xl font-bold text-green-700">
                   {formatPrice(getTotalPrice())}
                 </span>

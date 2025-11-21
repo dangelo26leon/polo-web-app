@@ -31,20 +31,20 @@ const FavoritesPage: React.FC<FavoritesPageProps> = ({
   const favoriteProducts = allProducts.filter(product => favorites.includes(product.id));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Encabezado de la página */}
         <div className="flex items-center mb-8">
           <button
             onClick={onBack}
-            className="flex items-center text-green-700 hover:text-green-800 font-medium mr-6 transition-colors"
+            className="flex items-center text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium mr-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Volver
           </button>
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Mis Favoritos</h1>
-            <p className="text-lg text-gray-600 mt-2">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Mis Favoritos</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">
               Aquí están los productos que más te gustan.
             </p>
           </div>
@@ -66,11 +66,11 @@ const FavoritesPage: React.FC<FavoritesPageProps> = ({
         ) : (
           // Mensaje si no hay favoritos
           <div className="text-center py-16">
-            <Heart className="w-20 h-20 text-gray-300 mx-auto mb-6" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Heart className="w-20 h-20 text-gray-300 dark:text-gray-600 mx-auto mb-6" />
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               Aún no tienes favoritos
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
               Haz clic en el corazón de un producto para guardarlo aquí.
             </p>
             <button

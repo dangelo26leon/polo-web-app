@@ -49,6 +49,23 @@ function App() {
   const [user, setUser] = useState<UserData | null>(null);
   const [toastMessage, setToastMessage] = useState('');
 
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  // Lógica para aplicar la clase 'dark' al <html> y guardar la preferencia
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const isDark = theme === 'dark';
+
+    root.classList.remove(isDark ? 'light' : 'dark');
+    root.classList.add(isDark ? 'dark' : 'light');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+  
+  // Función de alternancia que usarás en el botón del Header
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
   const allProducts: Product[] = [ ...allProductsData];
 
   const categories = Array.from(new Set(allProducts.map(product => product.category)));
@@ -187,7 +204,7 @@ function App() {
   // If we're on the auth page, render the AuthPage component
   if (currentPage === 'auth') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header 
           cartItems={getTotalCartItems()} 
           onCartClick={() => setIsCartOpen(true)} 
@@ -195,6 +212,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -221,7 +239,7 @@ function App() {
   // If we're on the profile page, render the UserProfile component
   if (currentPage === 'profile') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header 
           cartItems={getTotalCartItems()} 
           onCartClick={() => setIsCartOpen(true)} 
@@ -229,6 +247,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -259,7 +278,7 @@ function App() {
   // If we're on the favorites page, render the FavoritesPage component
   if (currentPage === 'favorites') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header 
           cartItems={getTotalCartItems()} 
           onCartClick={() => setIsCartOpen(true)} 
@@ -267,6 +286,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -296,7 +316,7 @@ function App() {
   // If we're on the checkout page, render the CheckoutPage component
   if (currentPage === 'checkout') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header 
           cartItems={getTotalCartItems()} 
           onCartClick={() => setIsCartOpen(true)} 
@@ -304,6 +324,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -332,7 +353,7 @@ function App() {
   // If we're on the products page, render the ProductsPage component
   if (currentPage === 'products') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header 
           cartItems={getTotalCartItems()} 
           onCartClick={() => setIsCartOpen(true)} 
@@ -340,6 +361,7 @@ function App() {
           onNavigate={setCurrentPage}
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
+          onToggleTheme={toggleTheme}
         />
 
         <Cart
@@ -368,7 +390,7 @@ function App() {
 
   // Home page content
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header 
         cartItems={getTotalCartItems()} 
         onCartClick={() => setIsCartOpen(true)} 
@@ -376,6 +398,7 @@ function App() {
         onNavigate={setCurrentPage}
         user={user}
         onProfileClick={() => setCurrentPage('profile')}
+        onToggleTheme={toggleTheme}
       />
 
       <Cart
@@ -392,13 +415,13 @@ function App() {
       {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage('')} />}
 
       {/* Hero Section */}
-      <section id="inicio" className="bg-gradient-to-r from-green-800 to-green-600 text-white">
+      <section id="inicio" className="bg-gradient-to-r from-green-800 to-green-600 text-white dark:from-green-900 dark:to-green-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
               {user ? `¡Bienvenido ${user.firstName}!` : 'Bienvenidos a Inversiones Polo'}
             </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-green-100">
+            <p className="text-xl sm:text-2xl mb-8 text-green-100 dark:text-green-200 ">
               Tu tienda de confianza para electrodomésticos y tecnología
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -420,11 +443,11 @@ function App() {
       </section>
 
       {/* Products Section */}
-      <section id="productos" className="py-16">
+      <section id="productos" className="py-16 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Nuestros Productos</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Nuestros Productos</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Ofrecemos una amplia variedad de electrodomésticos y tecnología de alta calidad
             </p>
           </div>
@@ -483,11 +506,11 @@ function App() {
       </section>
 
       {/* About Section */}
-      <section id="sobre-nosotros" className="py-16 bg-green-50">
+      <section id="sobre-nosotros" className="py-16 bg-green-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Sobre Nosotros</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Sobre Nosotros</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Inversiones Polo es una empresa familiar con más de 10 años de experiencia en el mercado. 
               Nos dedicamos a ofrecer productos de alta calidad a precios competitivos, 
               siempre con el mejor servicio al cliente.
@@ -499,31 +522,31 @@ function App() {
               <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Calidad Garantizada</h3>
-              <p className="text-gray-600">Todos nuestros productos cuentan con garantía y certificaciones de calidad</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Calidad Garantizada</h3>
+              <p className="text-gray-600 dark:text-gray-400">Todos nuestros productos cuentan con garantía y certificaciones de calidad</p>
             </div>
             
             <div className="text-center">
               <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Atención 24/7</h3>
-              <p className="text-gray-600">Nuestro equipo está disponible para ayudarte en cualquier momento</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Atención 24/7</h3>
+              <p className="text-gray-600 dark:text-gray-400">Nuestro equipo está disponible para ayudarte en cualquier momento</p>
             </div>
             
             <div className="text-center">
               <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Entrega Rápida</h3>
-              <p className="text-gray-600">Realizamos entregas en toda la ciudad de forma rápida y segura</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Entrega Rápida</h3>
+              <p className="text-gray-600 dark:text-gray-400">Realizamos entregas en toda la ciudad de forma rápida y segura</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contacto" className="py-16 bg-gray-900 text-white">
+      <section id="contacto" className="py-16 bg-gray-900 dark:bg-gray-950 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">Contáctanos</h2>
@@ -573,7 +596,7 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
+      <footer className="bg-gray-800 dark:bg-gray-950 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">

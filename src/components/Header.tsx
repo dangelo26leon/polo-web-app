@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, ShoppingCart, Phone, MapPin, Mail, Home, Package, Search, User, LogOut, Heart } from 'lucide-react';
+import { Menu, X, ShoppingCart, Phone, MapPin, Mail, Home, Package, Search, User, LogOut, Heart, Sun, Moon } from 'lucide-react';
 import logoPolo from '/images/logo_polo.png';
 
 interface UserData {
@@ -21,6 +21,7 @@ interface HeaderProps {
   onNavigate?: (page: 'home' | 'products' | 'checkout' | 'auth' | 'profile' | 'favorites') => void;
   user?: UserData | null;
   onProfileClick?: () => void;
+  onToggleTheme: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -29,7 +30,8 @@ const Header: React.FC<HeaderProps> = ({
   currentPage = 'home',
   onNavigate,
   user,
-  onProfileClick
+  onProfileClick,
+  onToggleTheme
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -61,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
@@ -76,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({
               }}
             >
               <img src={logoPolo} alt="Inversiones Polo Logo" className='h-12 w-12' />
-              <span className="ml-2 text-xl font-bold text-green-800">Inversiones Polo</span>
+              <span className="ml-2 text-xl font-bold text-green-800 dark:text-green-400">Inversiones Polo</span>
             </div>
           </div>
           
@@ -122,6 +124,18 @@ const Header: React.FC<HeaderProps> = ({
 
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
+              <button
+                onClick={onToggleTheme}
+                className="p-2 rounded-full text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Toggle dark mode"
+              >
+                {/* Muestra el Sol si está en modo oscuro (para cambiar a Claro) y la Luna si está en modo claro (para cambiar a Oscuro) */}
+                {window.document.documentElement.classList.contains('dark') ? (
+                  <Sun className="w-5 h-5" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
+              </button>
               <button 
                 onClick={onCartClick}
                 className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg flex items-center transition-colors relative"
@@ -260,6 +274,20 @@ const Header: React.FC<HeaderProps> = ({
                   </span>
                 )}
               </button>
+            <button
+              onClick={() => {
+                onToggleTheme();
+                setIsMenuOpen(false); // Opcional: cierra el menú al cambiar el tema
+              }}
+              className="w-full text-left px-4 py-2 text-base font-medium flex items-center text-gray-700 hover:text-green-700 dark:text-gray-300 dark:hover:text-green-500 transition-colors"
+            >
+              {window.document.documentElement.classList.contains('dark') ? (
+                <Sun className="w-5 h-5 mr-2" />
+              ) : (
+                <Moon className="w-5 h-5 mr-2" />
+              )}
+              {window.document.documentElement.classList.contains('dark') ? 'Modo Claro' : 'Modo Oscuro'}
+            </button>
 
               {user ? (
                 <div className="space-y-2">

@@ -160,11 +160,11 @@ ${itemsList}
 
   if (currentStep === 4) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full text-center">
           <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">¡Pedido Confirmado!</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">¡Pedido Confirmado!</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             Hemos recibido tu pedido. Te contactaremos pronto para coordinar la entrega.
           </p>
           <div className="space-y-3">
@@ -178,7 +178,7 @@ ${itemsList}
             </a>
             <button
               onClick={onBack}
-              className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 rounded-lg font-medium transition-colors"
+              className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 py-3 rounded-lg font-medium transition-colors"
             >
               Volver a la Tienda
             </button>
@@ -189,18 +189,18 @@ ${itemsList}
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-center mb-8">
           <button
             onClick={onBack}
-            className="flex items-center text-green-700 hover:text-green-800 font-medium mr-6 transition-colors"
+            className="flex items-center text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium mr-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Volver al Carrito
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">Finalizar Compra</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Finalizar Compra</h1>
         </div>
 
         {/* Progress Steps */}
@@ -209,12 +209,12 @@ ${itemsList}
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
-                  currentStep >= step ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'
+                  currentStep >= step ? 'bg-green-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                 }`}>
                   {step}
                 </div>
                 <span className={`ml-2 font-medium ${
-                  currentStep >= step ? 'text-green-600' : 'text-gray-500'
+                  currentStep >= step ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
                 }`}>
                   {step === 1 ? 'Datos Personales' : step === 2 ? 'Dirección' : 'Confirmación'}
                 </span>
@@ -227,25 +227,25 @@ ${itemsList}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form Section */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               {/* Step 1: Personal Information */}
               {currentStep === 1 && (
                 <div>
                   <div className="flex items-center mb-6">
                     <User className="w-6 h-6 text-green-600 mr-3" />
-                    <h2 className="text-xl font-semibold text-gray-900">Información Personal</h2>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Información Personal</h2>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Nombre *
                       </label>
                       <input
                         type="text"
                         value={customerData.firstName}
                         onChange={(e) => handleInputChange('firstName', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         placeholder="Tu nombre"
                       />
                     </div>
@@ -587,8 +587,8 @@ ${itemsList}
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-6 sticky top-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 sticky top-8">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                 <Package className="w-5 h-5 mr-2" />
                 Resumen del Pedido
               </h3>
@@ -602,8 +602,8 @@ ${itemsList}
                       className="w-12 h-12 object-cover rounded"
                     />
                     <div className="flex-1">
-                      <h4 className="text-sm font-medium text-gray-900">{item.name}</h4>
-                      <p className="text-xs text-gray-500">Cantidad: {item.quantity}</p>
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">{item.name}</h4>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Cantidad: {item.quantity}</p>
                     </div>
                     <span className="text-sm font-semibold text-green-600">{item.price}</span>
                   </div>
@@ -612,19 +612,19 @@ ${itemsList}
               
               <div className="border-t pt-4">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-600">Subtotal:</span>
-                  <span className="font-semibold">{formatPrice(getTotalPrice())}</span>
+                  <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
+                  <span className="font-semibold dark:text-gray-200">{formatPrice(getTotalPrice())}</span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-600">
+                  <span className="text-gray-600 dark:text-gray-400">
                     {customerData?.deliveryMethod === 'pickup' ? 'Recojo en tienda:' : 'Envío:'}
                   </span>
-                  <span className="font-semibold text-green-600">Gratis</span>
+                  <span className="font-semibold text-green-600 dark:text-green-400">Gratis</span>
                 </div>
                 <div className="border-t pt-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold">Total:</span>
-                    <span className="text-xl font-bold text-green-600">{formatPrice(getTotalPrice())}</span>
+                    <span className="text-lg font-semibold dark:text-white">Total:</span>
+                    <span className="text-xl font-bold text-green-600 dark:text-green-400">{formatPrice(getTotalPrice())}</span>
                   </div>
                 </div>
               </div>

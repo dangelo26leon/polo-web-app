@@ -71,10 +71,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onLogout,
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'confirmed': return 'bg-blue-100 text-blue-800';
-      case 'delivered': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'pending': return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100';
+      case 'confirmed': return 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100';
+      case 'delivered': return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100';
     }
   };
 
@@ -92,26 +92,26 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onLogout,
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div className="flex items-center mb-4 sm:mb-0">
               <div className="bg-green-700 w-16 h-16 rounded-full flex items-center justify-center mr-4">
                 <User className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                   {user.firstName} {user.lastName}
                 </h1>
-                <p className="text-gray-600">{user.email}</p>
+                <p className="text-gray-600 dark:text-gray-400">{user.email}</p>
               </div>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={onBack}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Volver a la Tienda
               </button>
@@ -126,15 +126,15 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onLogout,
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow-md">
-          <div className="border-b border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
+          <div className="border-b border-gray-200 dark:border-gray-700">
             <nav className="flex space-x-8 px-6">
               <button
                 onClick={() => setActiveTab('profile')}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'profile'
-                    ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-green-500 text-green-600 dark:text-green-400'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <User className="w-4 h-4 inline mr-2" />
@@ -144,8 +144,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onLogout,
                 onClick={() => setActiveTab('orders')}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'orders'
-                    ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-green-500 text-green-600 dark:text-green-400'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <Package className="w-4 h-4 inline mr-2" />
@@ -158,7 +158,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onLogout,
             {activeTab === 'profile' && (
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold text-gray-900">Información Personal</h2>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Información Personal</h2>
                   {!isEditing ? (
                     <button
                       onClick={() => setIsEditing(true)}
@@ -192,7 +192,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onLogout,
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Nombre
                     </label>
                     {isEditing ? (
@@ -200,10 +200,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onLogout,
                         type="text"
                         value={editData.firstName}
                         onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       />
                     ) : (
-                      <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{user.firstName}</p>
+                      <p className="text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded-lg">{user.firstName}</p>
                     )}
                   </div>
 
