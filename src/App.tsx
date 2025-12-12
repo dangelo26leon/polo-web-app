@@ -9,6 +9,8 @@ import UserProfile from './components/UserProfile';
 import SearchFilter from './components/SearchFilter';
 import FavoritesPage from './components/FavoritePage';
 import Toast from './components/Toast';
+import HeroCarousel from './components/HeroCarousel';
+import SkeletonCard from './components/SkeletonCard';
 import allProductsData from './data/Products.json';
 import { Package, Phone, MapPin, Mail } from 'lucide-react';
 import logoPolo from '/images/logo_polo.png';
@@ -54,20 +56,30 @@ function App() {
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [cartAnimation, setCartAnimation] = useState(false);
 
   // Inicializar productos desde JSON y localStorage
   useEffect(() => {
+    setIsLoadingProducts(true);
     const savedProducts = localStorage.getItem('inversionesPoloProducts');
-    if (savedProducts) {
-      try {
-        setProducts(JSON.parse(savedProducts));
-      } catch (error) {
-        console.error('Error al cargar productos guardados:', error);
+    
+    // Simulate loading delay for better UX
+    const timer = setTimeout(() => {
+      if (savedProducts) {
+        try {
+          setProducts(JSON.parse(savedProducts));
+        } catch (error) {
+          console.error('Error al cargar productos guardados:', error);
+          setProducts([...allProductsData]);
+        }
+      } else {
         setProducts([...allProductsData]);
       }
-    } else {
-      setProducts([...allProductsData]);
-    }
+      setIsLoadingProducts(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Guardar productos en localStorage cuando cambien
@@ -216,6 +228,10 @@ function App() {
       )
     );
 
+    // Trigger cart bounce animation
+    setCartAnimation(true);
+    setTimeout(() => setCartAnimation(false), 500);
+
     setToastMessage(`${product.name} agregado al carrito.`);
   };
 
@@ -350,6 +366,7 @@ function App() {
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
           onToggleTheme={toggleTheme}
+          cartAnimation={cartAnimation}
         />
 
         <Cart
@@ -390,6 +407,7 @@ function App() {
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
           onToggleTheme={toggleTheme}
+          cartAnimation={cartAnimation}
         />
 
         <Cart
@@ -434,6 +452,7 @@ function App() {
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
           onToggleTheme={toggleTheme}
+          cartAnimation={cartAnimation}
         />
 
         <Cart
@@ -477,6 +496,7 @@ function App() {
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
           onToggleTheme={toggleTheme}
+          cartAnimation={cartAnimation}
         />
 
         <Cart
@@ -519,6 +539,7 @@ function App() {
           user={user}
           onProfileClick={() => setCurrentPage('profile')}
           onToggleTheme={toggleTheme}
+          cartAnimation={cartAnimation}
         />
 
         <Cart
@@ -561,6 +582,7 @@ function App() {
         user={user}
         onProfileClick={() => setCurrentPage('profile')}
         onToggleTheme={toggleTheme}
+        cartAnimation={cartAnimation}
       />
 
       <Cart
@@ -581,38 +603,12 @@ function App() {
         />
       )}
 
-      {/* Hero Section */}
-      <section
-        id="inicio"
-        className="bg-gradient-to-r from-green-800 to-green-600 text-white dark:from-green-900 dark:to-green-700"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              {user
-                ? `¡Bienvenido ${user.firstName}!`
-                : 'Bienvenidos a Inversiones Polo'}
-            </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-green-100">
-              Tu tienda de confianza para electrodomésticos y tecnología
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={scrollToProducts}
-                className="bg-white text-green-800 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors"
-              >
-                Ver Productos
-              </button>
-              <button
-                onClick={scrollToContact}
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-800 transition-colors"
-              >
-                Contactar
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel */}
+      <HeroCarousel
+        userName={user?.firstName}
+        onViewProducts={scrollToProducts}
+        onContact={scrollToContact}
+      />
 
       {/* Products Section */}
       <section id="productos" className="py-16 bg-white dark:bg-gray-800">
@@ -639,18 +635,30 @@ function App() {
             onCommitSearch={handleCommitSearch}
           />
 
-          {/* Show only first 8 products on home page */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {filteredProducts.slice(0, 8).map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={addToCart}
-                onToggleFavorite={toggleFavorite}
-                isFavorite={favorites.includes(product.id)}
-              />
-            ))}
-          </div>
+          {/* Show only first 8 products on home page with Skeleton Loading */}
+          {isLoadingProducts ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+              {[...Array(8)].map((_, index) => (
+                <SkeletonCard key={index} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+              {filteredProducts.slice(0, 8).map((product, index) => (
+                <div 
+                  key={product.id} 
+                  className={`animate-pop-in opacity-0 stagger-${(index % 8) + 1}`}
+                >
+                  <ProductCard
+                    product={product}
+                    onAddToCart={addToCart}
+                    onToggleFavorite={toggleFavorite}
+                    isFavorite={favorites.includes(product.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Show "Ver todos los productos" button if there are more than 8 products */}
           {allProducts.length > 8 && (

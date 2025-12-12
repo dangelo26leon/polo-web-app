@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
+import ProductCardList from './ProductCardList';
+import SkeletonCard from './SkeletonCard';
 import SearchFilter from './SearchFilter';
-import { Package, ArrowLeft } from 'lucide-react';
+import { Package, ArrowLeft, Grid3X3, List } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -32,6 +34,29 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortBy, setSortBy] = useState('name');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading for skeleton effect
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, [products]);
+
+  // Load view mode preference from localStorage
+  useEffect(() => {
+    const savedViewMode = localStorage.getItem('inversionesPoloViewMode');
+    if (savedViewMode === 'grid' || savedViewMode === 'list') {
+      setViewMode(savedViewMode);
+    }
+  }, []);
+
+  // Save view mode preference
+  const handleViewModeChange = (mode: 'grid' | 'list') => {
+    setViewMode(mode);
+    localStorage.setItem('inversionesPoloViewMode', mode);
+  };
 
   const categories = Array.from(new Set(products.map(product => product.category)));
 
@@ -94,7 +119,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
             
             {/* Sort Options */}
             <div className="lg:w-64">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Ordenar por:
               </label>
               <select
@@ -107,6 +132,37 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
                 <option value="price-high">Precio (Mayor a Menor)</option>
                 <option value="rating">Mejor Calificación</option>
               </select>
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="lg:w-auto">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Vista:
+              </label>
+              <div className="flex border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => handleViewModeChange('grid')}
+                  className={`p-2 transition-colors ${
+                    viewMode === 'grid'
+                      ? 'bg-green-700 text-white'
+                      : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  }`}
+                  title="Vista en cuadrícula"
+                >
+                  <Grid3X3 className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => handleViewModeChange('list')}
+                  className={`p-2 transition-colors ${
+                    viewMode === 'list'
+                      ? 'bg-green-700 text-white'
+                      : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  }`}
+                  title="Vista en lista"
+                >
+                  <List className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -132,19 +188,54 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
           )}
         </div>
 
-        {/* Products Grid */}
-        {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={onAddToCart}
-                onToggleFavorite={onToggleFavorite}
-                isFavorite={favorites.includes(product.id)}
-              />
+        {/* Products Grid/List */}
+        {isLoading ? (
+          // Skeleton Loading
+          <div className={viewMode === 'grid' 
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            : "flex flex-col gap-4"
+          }>
+            {[...Array(8)].map((_, index) => (
+              <SkeletonCard key={index} />
             ))}
           </div>
+        ) : filteredProducts.length > 0 ? (
+          viewMode === 'grid' ? (
+            // Grid View
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product, index) => (
+                <div 
+                  key={product.id} 
+                  className={`animate-pop-in opacity-0 stagger-${(index % 8) + 1}`}
+                >
+                  <ProductCard
+                    product={product}
+                    onAddToCart={onAddToCart}
+                    onToggleFavorite={onToggleFavorite}
+                    isFavorite={favorites.includes(product.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            // List View
+            <div className="flex flex-col gap-4">
+              {filteredProducts.map((product, index) => (
+                <div 
+                  key={product.id} 
+                  className={`animate-slide-up opacity-0`}
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <ProductCardList
+                    product={product}
+                    onAddToCart={onAddToCart}
+                    onToggleFavorite={onToggleFavorite}
+                    isFavorite={favorites.includes(product.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          )
         ) : (
           <div className="text-center py-16">
             <Package className="w-20 h-20 text-gray-300 dark:text-gray-600 mx-auto mb-6" />

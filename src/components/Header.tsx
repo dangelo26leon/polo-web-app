@@ -23,6 +23,7 @@ interface HeaderProps {
   user?: UserData | null;
   onProfileClick?: () => void;
   onToggleTheme: () => void;
+  cartAnimation?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -32,7 +33,8 @@ const Header: React.FC<HeaderProps> = ({
   onNavigate,
   user,
   onProfileClick,
-  onToggleTheme
+  onToggleTheme,
+  cartAnimation = false
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -140,12 +142,16 @@ const Header: React.FC<HeaderProps> = ({
               <BigTextToggle></BigTextToggle>
               <button 
                 onClick={onCartClick}
-                className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg flex items-center transition-colors relative"
+                className={`bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg flex items-center transition-all relative ${
+                  cartAnimation ? 'animate-cart-bounce' : ''
+                }`}
               >
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 Carrito
                 {cartItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center ${
+                    cartAnimation ? 'animate-pulse-ring' : ''
+                  }`}>
                     {cartItems}
                   </span>
                 )}
