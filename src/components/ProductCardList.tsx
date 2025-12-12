@@ -88,9 +88,9 @@ const ProductCardList: React.FC<ProductCardListProps> = ({
   const isOutOfStock = product.stock === 0;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row">
+    <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row">
       {/* Image */}
-      <div className="relative sm:w-48 md:w-56 flex-shrink-0">
+      <div className="relative sm:w-48 md:w-56 lg:w-64 flex-shrink-0">
         <img 
           src={product.image} 
           alt={product.name}

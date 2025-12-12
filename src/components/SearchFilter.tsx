@@ -7,10 +7,10 @@ interface SearchFilterProps {
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
   categories: string[];
-  searchHistory: string[];
-  onClearHistory: () => void;
-  onSearchFromHistory: (term: string) => void;
-  onCommitSearch: (term: string) => void;
+  searchHistory?: string[];
+  onClearHistory?: () => void;
+  onSearchFromHistory?: (term: string) => void;
+  onCommitSearch?: (term: string) => void;
 }
 
 const SearchFilter: React.FC<SearchFilterProps> = ({
@@ -19,7 +19,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   selectedCategory,
   onCategoryChange,
   categories,
-  searchHistory,
+  searchHistory = [],
   onClearHistory,
   onSearchFromHistory,
   onCommitSearch,
@@ -35,7 +35,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   };
 
   const handleHistoryClick = (term: string) => {
-    onSearchFromHistory(term);
+    onSearchFromHistory?.(term);
     setIsInputFocused(false);
   };
 
@@ -77,7 +77,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
             onFocus={() => setIsInputFocused(true)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                onCommitSearch(e.currentTarget.value);
+                onCommitSearch?.(e.currentTarget.value);
                 setIsInputFocused(false);
               }
             }}

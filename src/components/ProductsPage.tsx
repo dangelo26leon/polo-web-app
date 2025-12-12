@@ -121,7 +121,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
         {/* Header with back button */}
         <div className="flex items-center mb-8">
           <button
@@ -423,7 +423,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
             </div>
           ) : (
             // List View
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 w-full">
               {filteredProducts.map((product, index) => (
                 <div 
                   key={product.id} 
@@ -464,7 +464,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
         {/* Category Showcase */}
         {!searchTerm && !selectedCategory && (
           <div className="mt-16">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
               Explora por Categorías
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -475,18 +475,18 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
                 return (
                   <div
                     key={category}
-                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                     onClick={() => setSelectedCategory(category)}
                   >
                     <div className="flex">
                       <div className="flex-1 p-6">
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                           {category}
                         </h3>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">
                           {categoryProducts.length} productos disponibles
                         </p>
-                        <button className="text-green-700 hover:text-green-800 font-medium">
+                        <button className="text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium">
                           Ver todos →
                         </button>
                       </div>
