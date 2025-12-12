@@ -3,7 +3,7 @@ import ProductCard from './ProductCard';
 import ProductCardList from './ProductCardList';
 import SkeletonCard from './SkeletonCard';
 import SearchFilter from './SearchFilter';
-import { Package, ArrowLeft, Grid3X3, List } from 'lucide-react';
+import { Package, ArrowLeft, Grid3X3, List, SlidersHorizontal, Star, X } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -36,6 +36,21 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
   const [sortBy, setSortBy] = useState('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isLoading, setIsLoading] = useState(true);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  
+  // Filtros avanzados
+  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 2000 });
+  const [minRating, setMinRating] = useState<number>(0);
+  const [onlyInStock, setOnlyInStock] = useState<boolean>(false);
+
+  // Calcular el rango de precios de los productos
+  const parsePrice = (price: string) => {
+    return parseFloat(price.replace('S/', '').replace(',', '').trim()) || 0;
+  };
+
+  const productPrices = products.map(p => parsePrice(p.price));
+  const minProductPrice = Math.floor(Math.min(...productPrices));
+  const maxProductPrice = Math.ceil(Math.max(...productPrices));
 
   // Simulate loading for skeleton effect
   useEffect(() => {
@@ -60,12 +75,33 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
 
   const categories = Array.from(new Set(products.map(product => product.category)));
 
+  // Contar filtros activos
+  const activeFiltersCount = [
+    priceRange.min > minProductPrice || priceRange.max < maxProductPrice,
+    minRating > 0,
+    onlyInStock
+  ].filter(Boolean).length;
+
+  // Limpiar todos los filtros avanzados
+  const clearAdvancedFilters = () => {
+    setPriceRange({ min: minProductPrice, max: maxProductPrice });
+    setMinRating(0);
+    setOnlyInStock(false);
+  };
+
   // Filter and sort products
   const filteredProducts = products
     .filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === '' || product.category === selectedCategory;
-      return matchesSearch && matchesCategory;
+      
+      // Filtros avanzados
+      const productPrice = parsePrice(product.price);
+      const matchesPrice = productPrice >= priceRange.min && productPrice <= priceRange.max;
+      const matchesRating = product.rating >= minRating;
+      const matchesStock = !onlyInStock || product.stock > 0;
+      
+      return matchesSearch && matchesCategory && matchesPrice && matchesRating && matchesStock;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -164,7 +200,173 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
                 </button>
               </div>
             </div>
+
+            {/* Advanced Filters Toggle */}
+            <div className="lg:w-auto">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Filtros:
+              </label>
+              <button
+                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                className={`flex items-center px-4 py-2 rounded-lg border transition-colors ${
+                  showAdvancedFilters || activeFiltersCount > 0
+                    ? 'bg-green-700 text-white border-green-700'
+                    : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'
+                }`}
+              >
+                <SlidersHorizontal className="w-5 h-5 mr-2" />
+                Avanzados
+                {activeFiltersCount > 0 && (
+                  <span className="ml-2 bg-white text-green-700 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* Advanced Filters Panel */}
+          {showAdvancedFilters && (
+            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 animate-slide-up">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                  <SlidersHorizontal className="w-5 h-5 mr-2" />
+                  Filtros Avanzados
+                </h3>
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={clearAdvancedFilters}
+                    className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 flex items-center"
+                  >
+                    <X className="w-4 h-4 mr-1" />
+                    Limpiar filtros
+                  </button>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Price Range Filter */}
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    💰 Rango de Precio
+                  </label>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">S/</span>
+                      <input
+                        type="number"
+                        min={minProductPrice}
+                        max={priceRange.max}
+                        value={priceRange.min}
+                        onChange={(e) => setPriceRange(prev => ({ ...prev, min: Number(e.target.value) }))}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                        placeholder="Mínimo"
+                      />
+                      <span className="text-gray-500">-</span>
+                      <input
+                        type="number"
+                        min={priceRange.min}
+                        max={maxProductPrice}
+                        value={priceRange.max}
+                        onChange={(e) => setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                        placeholder="Máximo"
+                      />
+                    </div>
+                    <input
+                      type="range"
+                      min={minProductPrice}
+                      max={maxProductPrice}
+                      value={priceRange.max}
+                      onChange={(e) => setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))}
+                      className="w-full accent-green-700"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                      <span>S/ {minProductPrice}</span>
+                      <span>S/ {maxProductPrice}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rating Filter */}
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    ⭐ Rating Mínimo
+                  </label>
+                  <div className="space-y-2">
+                    {[0, 3, 3.5, 4, 4.5].map((rating) => (
+                      <button
+                        key={rating}
+                        onClick={() => setMinRating(rating)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border transition-colors ${
+                          minRating === rating
+                            ? 'bg-green-700 text-white border-green-700'
+                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-green-500'
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          {rating === 0 ? (
+                            <span className="text-sm">Todos</span>
+                          ) : (
+                            <>
+                              <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`w-4 h-4 ${
+                                      i < Math.floor(rating)
+                                        ? minRating === rating ? 'fill-white text-white' : 'fill-yellow-400 text-yellow-400'
+                                        : minRating === rating ? 'text-white/50' : 'text-gray-300'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                              <span className="ml-2 text-sm">{rating}+</span>
+                            </>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Stock Filter */}
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    📦 Disponibilidad
+                  </label>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => setOnlyInStock(false)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border transition-colors ${
+                        !onlyInStock
+                          ? 'bg-green-700 text-white border-green-700'
+                          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-green-500'
+                      }`}
+                    >
+                      <span className="text-sm">Mostrar todos</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${!onlyInStock ? 'bg-white/20' : 'bg-gray-200 dark:bg-gray-600'}`}>
+                        {products.length}
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => setOnlyInStock(true)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border transition-colors ${
+                        onlyInStock
+                          ? 'bg-green-700 text-white border-green-700'
+                          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-green-500'
+                      }`}
+                    >
+                      <span className="text-sm">Solo en stock</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${onlyInStock ? 'bg-white/20' : 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400'}`}>
+                        {products.filter(p => p.stock > 0).length}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Products Stats */}
@@ -173,17 +375,19 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
             Mostrando {filteredProducts.length} de {products.length} productos
             {selectedCategory && ` en "${selectedCategory}"`}
             {searchTerm && ` para "${searchTerm}"`}
+            {activeFiltersCount > 0 && ` (${activeFiltersCount} filtro${activeFiltersCount > 1 ? 's' : ''} activo${activeFiltersCount > 1 ? 's' : ''})`}
           </p>
           
-          {(searchTerm || selectedCategory) && (
+          {(searchTerm || selectedCategory || activeFiltersCount > 0) && (
             <button
               onClick={() => {
                 setSearchTerm('');
                 setSelectedCategory('');
+                clearAdvancedFilters();
               }}
               className="text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium text-sm"
             >
-              Limpiar filtros
+              Limpiar todos los filtros
             </button>
           )}
         </div>
